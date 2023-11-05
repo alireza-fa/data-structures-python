@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-![data-structures.png](..%2F..%2F..%2FDesktop%2Fimg%2Fdata-structures.png)
+![data-structures.png](https://miro.medium.com/v2/resize:fit:1200/1*KpDOKMFAgDWaGTQHL0r70g.png)
 
 <h3>ساختمان داده (Data Structure) چیست؟</h3>
 

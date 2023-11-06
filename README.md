@@ -7,7 +7,7 @@
 
 <a href="https://github.com/alireza-fa/data-structures-python#%D8%B3%D8%A7%D8%AE%D8%AA%D9%85%D8%A7%D9%86-%D8%AF%D8%A7%D8%AF%D9%87-%D8%A2%D8%B1%D8%A7%DB%8C%D9%87array">Array</a>
 
-<a href="">Array List</a>
+<a href="https://github.com/alireza-fa/data-structures-python/tree/main#%D8%B3%D8%A7%D8%AE%D8%AA%D9%85%D8%A7%D9%86-%D8%AF%D8%A7%D8%AF%D9%87-array-list">Array List</a>
 
 <a href="https://github.com/alireza-fa/data-structures-python#%D8%B5%D9%81-queue">Queue</a>
 

@@ -245,7 +245,7 @@ class Stack(list):
 ```
 
 <div dir="rtl">
-<h3>دک (Deque)</h3>
+<h3>دک (dequeue)</h3>
 دک رو میشه اینطور در نظر گرفت که صف و پشته رو با هم ترکیب کردیم. یعنی هم میتونیم مانند صف هر کی اول وارد شده، دریافتش کنیم و هم میتونیم مانند پشته هر کی که آخر وارد شده، دریافتش کنیم.
 
 <h3>نکته:</h3>
@@ -258,5 +258,92 @@ class Stack(list):
 
 برای حل این مشکل ما میتونیم از لیست های پیوندی استفاده کنیم.🥳
 
-خب بریم ببینیم لیست پیوندی چیه ...
+بعد از توضیح ساختار لیست پایتون میریم سراغش...
+
+<h3>لیست پایتون</h3>
+ساختار داده ی لیست پایتون بصورت Dynamic Array و یا همون Array list هستند. به همین دلیل در مثال بالا که برای ساخت صف و پشته از لیست پایتون استفاده کردیم گفتبم که به مشکل o(n) 
+برخورد میکنیم. چون Dynamic array ها بصورت متوالی دیتا رو ذخیره میکنن.
+
+یعنی وقتی که ما میایم ایندکس 0 رو حذف میکنیم کل عناصر لیست باید یک ایندکس به عقب بروند و یا موقعی که چیزی رو insert می کنیم باید عناصر بعد از آن ایندکس که اضافه کردیم یک ایندکس به جلو بروند و خب این خوب نیست.
+
+البته این رو هم در نظر بگیرید در تعداد پایین و سایز کم لیست ها خیلیم عالی هستند و خیلی کاربرد داره اما در big data پیشنهاد نمی شود.
+
+pointer:
+
+پایتون در واقع داخل لیست ها دیتا رو ذخیره نمی کته. کاری که می کنه اینه pointer اون دیتا رو ذخیره میکنه یعنی اشاره گری که فضای دیتا رو نشون میده. اینکار سبب میشه که یه سری مزیت هارو لیست های پایتون بدست بیاره
+
+در کتاب Hands on data structures and algorithms with Python اینگونه توضیح داده:
+
+Contrary to arrays, pointer structures are lists of items that can be spread out in memory.
+This is because each item contains one or more links to other items in the structure. The
+types of these links are dependent on the type of structures we have. If we are dealing with
+linked lists, then we will have links to the next (and possibly previous) items in the
+structure. In the case of a tree, we have parent-child links as well as sibling links.
+There are several benefits to pointer structures. First of all, they don't require sequential
+storage space. Secondly, they can start small and grow arbitrarily as you add more nodes to
+the structure. However, this flexibility in pointers comes at a cost. We need additional space
+to store the address. For example, if you have a list of integers, each node is going to take
+up space by storing an integer, as well as an additional integer for storing the pointer to the
+next node
+
+<h3>لیست پایتون چگونه عمل می کند؟</h3>
+در این قسمت با چند مثال نحوه کارکرد لیست رو در Cpython بررسی میکنیم.
+
+قبل از هرچیزی باید معنی size لیست و allocated slots رو بدونید. size در واقع همون مقدار عناصر داخل لیستمون هستش که با len() میشه بدستش آورد.
+اما allocated slots مقدار فضایی که موقع ساخن array اختصاص دادیم هستش. همونطور که میدونید لیست پایتون در واقع یک Dynamic array هستش که در نهایت به array می رسد.
+
+ساختن لیست:
+فرض کنید ما یک لیست حالی میسازیم. در این صورت allocated size ما مساوی با 0 است.
+
+عملیات append:
+
+اول از همه چک میشود که size لیست از allocated کوچک تر باشد و اگر مساوی بود آرایه رو resize میکنه و یک آرایه بزرگ تر می سازد.
+برای resize کردن یک فرمولی براش داره مثل زیر:
+
+The growth pattern of the list is: 0, 4, 8, 16, 25, 35, 46, 58, 72, 88, …
+
+پس الان لیست ما allocated slots مساوی با 4 هستش. یعنی اگه عملیات append رو تا 4 بار انجام بدیم بصورت o(1)
+انجام میشود
+
 </div>
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list.png)
+
+<div dir="rtl">همچنین میتونیم
+append رو سه بار دیگم با o(1)
+ادامه بدیم
+</div>
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list_4.png)
+
+<div dir="rtl">
+عملیات insert:
+
+لیست ما الان allocated مساوی با 4 هستش و size هم مساوی با چهار.
+در عملیات insert که میخوایم انجام بدیم اول از همه لیست ما resize میشه و allocated slots مساوی با 8 میشه و سپس عملیات insert به شکل زیر انجام میشه.
+
+
+</div>
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list_insert.png)
+
+<div dir="rtl">
+همانطور که در عکس مشخص است. در insert کردن عناصری که بعد از چیزی که insert کردیم قرار دارند، یک ایندکس به جلو میروند و time complexity ما o(n)
+است.
+
+عملیات pop و remove:
+
+در عملیات remove و pop کردن دقیقا چیزی شبیه به insert اتفاق می افتد با این تفاوت عنصر آن ایندکسی که اشاره میکنیم حذف میشود و عناصر بغد آن یک ایندکس به عقب می روند.
+</div>
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list_pop.png)
+
+<div dir="rtl">
+توجه کنید ما resize شدن رو هم داریم.
+وقتی که allocated ما نسبت به size از یک مقداری بزرگ تر میشود. resize میشود و کوچک تر میشود.
+
+</div>
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list_pop_2.png)
+
+![data-structures.png](http://www.laurentluce.com/images/blog/list/list_remove.png)

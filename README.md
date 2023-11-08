@@ -17,6 +17,15 @@
 
 <a href="https://github.com/alireza-fa/data-structures-python#%D9%84%DB%8C%D8%B3%D8%AA-%D9%BE%D8%A7%DB%8C%D8%AA%D9%88%D9%86-%DA%86%DA%AF%D9%88%D9%86%D9%87-%D8%B9%D9%85%D9%84-%D9%85%DB%8C-%DA%A9%D9%86%D8%AF">7-How list work in python?</a>
 
+<a href="https://github.com/alireza-fa/data-structures-python#%D9%84%DB%8C%D8%B3%D8%AA-%D9%87%D8%A7%DB%8C-%D9%BE%DB%8C%D9%88%D9%86%D8%AF%DB%8C">8-Introducing the linked list</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D8%A7%D9%86%D9%88%D8%A7%D8%B9-%D9%84%DB%8C%D8%B3%D8%AA-%D9%87%D8%A7%DB%8C-%D9%BE%DB%8C%D9%88%D9%86%D8%AF%DB%8C">9-Types of linked list</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D9%BE%DB%8C%D8%A7%D8%AF%D9%87-%D8%B3%D8%A7%D8%B2%DB%8C-singly-linked-list">10-Singly linked list</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D9%BE%DB%8C%D8%A7%D8%AF%D9%87-%D8%B3%D8%A7%D8%B2%DB%8C-doubly-linked-list">11-Doubly linked list</a>
+
+
 <div dir="rtl">
 
 <h3>ساختمان داده (Data Structure) چیست؟</h3>
@@ -395,7 +404,132 @@ append رو سه بار دیگم با o(1)
 <h3>
 پیاده سازی Singly linked list
 </h3>
+با توجه به توضیحاتی که دادیم، یک Singly linked list در پایتون پیاده میکنیم.
 
+توجه:
+
+یک سری مشکلات در کد من وجود دارد و صرفا مثالی از نحوه پیاده کردنش زدم. اگه دوست دارید میتونید اصلاحش کنید و ریکوئست بزنید.
+</div>
+
+```Python
+from typing import Any, Optional
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class SinglyLinkedList:
+
+    def __init__(self) -> None:
+        self.__head = None
+        self.__tail = None
+        self.__size = 0
+
+    def __set_new_head(self, node: Node) -> None:
+        self.__head = node
+
+    def __set_new_tail(self, node: Node) -> None:
+        self.__tail = node
+
+    def head(self) -> Node:
+        return self.__head
+
+    def tail(self) -> Node:
+        return self.__tail
+
+    def __update_size(self) -> None:
+        self.__size += 1
+
+    def size(self) -> int:
+        return self.__size
+
+    def insure_index(self, index: int) -> None:
+        try:
+            if index > self.size():
+                raise IndexError
+        except ValueError:
+            raise IndexError
+
+    def append(self, data: Any) -> None:
+        new_node = Node(data=data)
+        if self.head() is None:
+            self.__set_new_head(node=new_node)
+
+        if self.tail() is None:
+            self.__set_new_tail(node=new_node)
+        else:
+            self.tail().next = new_node
+            self.__set_new_tail(node=new_node)
+
+        self.__update_size()
+
+    def set(self, index: int, data: Any) -> None:
+        self.insure_index(index=index)
+
+        count = 0
+        current = self.head()
+
+        while index != count:
+            current = current.next
+            count += 1
+
+        current.data = data
+
+    def remove(self, index: int) -> None:
+        self.insure_index(index=index)
+
+        count = 0
+        previous = None
+        current = self.head()
+
+        while index != count:
+            previous = current
+            current = current.next
+            count += 1
+
+        previous.next = current.next
+        del current
+
+    def pop(self, index: Optional[int] = None) -> Any:
+        if index is None:
+            index = self.size() - 1
+
+        self.insure_index(index=index)
+
+        count = 0
+        previous = None
+        current = self.head()
+
+        while index != count:
+            previous = current
+            current = current.next
+            count += 1
+
+        if previous:
+            if current.next:
+                previous.next = current.next
+            else:
+                self.__set_new_tail(node=previous)
+                previous.next = None
+        else:
+            self.__set_new_head(node=current)
+
+        data = current.data
+        del current
+
+        return data
+
+    def print_list(self) -> None:
+        current = self.head()
+        while current:
+            print(current.data)
+            current = current.next
+```
+
+<div dir="rtl">
 <h3>
 پیاده سازی Doubly linked list
 </h3>

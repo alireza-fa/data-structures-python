@@ -25,6 +25,14 @@
 
 <a href="https://github.com/alireza-fa/data-structures-python#%D9%BE%DB%8C%D8%A7%D8%AF%D9%87-%D8%B3%D8%A7%D8%B2%DB%8C-doubly-linked-list">11-Doubly linked list</a>
 
+<a href="https://github.com/alireza-fa/data-structures-python#%D8%A7%D9%84%DA%AF%D9%88%D8%B1%DB%8C%D8%AA%D9%85-%D9%85%D8%B1%D8%AA%D8%A8-%D8%B3%D8%A7%D8%B2%DB%8C">12-Sorting algorithms</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D8%A7%D9%84%DA%AF%D9%88%D8%B1%DB%8C%D8%AA%D9%85-%D9%85%D8%B1%D8%AA%D8%A8-%D8%B3%D8%A7%D8%B2%DB%8C-%D8%A7%D9%86%D8%AA%D8%AE%D8%A7%D8%A8%DB%8C">13-Selection sort</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D8%A7%D9%84%DA%AF%D9%88%D8%B1%DB%8C%D8%AA%D9%85-%D9%85%D8%B1%D8%AA%D8%A8-%D8%B3%D8%A7%D8%B2%DB%8C-%D8%AF%D8%B1%D8%AC%DB%8C">14-Insertion sort</a>
+
+<a href="https://github.com/alireza-fa/data-structures-python#%D8%A7%D9%84%DA%AF%D9%88%D8%B1%DB%8C%D8%AA%D9%85-%D9%85%D8%B1%D8%AA%D8%A8-%D8%B3%D8%A7%D8%B2%DB%8C-%D8%AD%D8%A8%D8%A7%D8%A8%DB%8C">15-Bubble sort</a>
+
 
 <div dir="rtl">
 
@@ -708,13 +716,13 @@ unsorted_list = [10, 5, 8, 4, 6, 1, 3, 7, 2, 9, -1]
 print(unsorted_list)
 
 
-for i in range(0, len(unsorted_list)):
-    for j in range(1 + i, len(unsorted_list)):
-        if unsorted_list[i] > unsorted_list[j]:
-            emp = unsorted_list[i]
-            unsorted_list[i] = unsorted_list[j]
-            unsorted_list[j] = emp
+for i in range(len(unsorted_list)):
+    min_index = i
+    for j in range(i + 1, len(unsorted_list)):
+        if unsorted_list[j] < unsorted_list[min_index]:
+            min_index = j
 
+    (unsorted_list[i], unsorted_list[min_index]) = (unsorted_list[min_index], unsorted_list[i])
 
 print(unsorted_list)
 ```

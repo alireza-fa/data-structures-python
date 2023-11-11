@@ -93,11 +93,11 @@ Student     code: int
 ```
 
 <div dir="rtl">
-تشکیل می شود. توی اینجا ما به Student میگیم Struct که البته توی زبان C بیشتر می شنوید.
+تشکیل می شود. توی اینجا ما به Student میگیم Struct که البته توی زمان C بیشتر می شنوید.
 
 Aggregation:
 
-یک روش دیگه هم برای مدیریت و ساخت انواع جدید، aggregation (البته چند روش دیگه هم داریم) هست. توی Aggregation یک سری از آبجکت ها، اشیا رو کنار هم قرار میدیم تا یک چیز بزرگ تری رو بسازیم
+یک روش دیگه هم برای مدریت و ساخت انواع جدید، aggregation (البته چند روش دیگه هم داریم) هست. توی Aggregation یک سری از آبجکت ها، اشیا رو کنار هم قرار میدیم تا یک چیز بزرگ تری رو بسازیم
 
 مثلا تعدادی دانشجو رو کنار هم قرار میدیم و کلاس رو میسازیم
 
@@ -145,7 +145,7 @@ get(0) -----> 1
 
 بتونیم insert, remove, add, get_size رو انجام بدیم.
 
-همونطور که اشاره کردیم آرایه در ابتدا اینکه چقدر طول داشته باشه رو از ما میگیره و قابل تغییر دادن هم که نیست. پس احتمالا حدس زدید کاری که انجام میدیم اینه که
+همونطور که اشاره کردیم آرایه در ابتدا اینکه چقدر طول داشته باشه رو از ما میگیره و قابل تغییر دادن هم که نیسن. پس احتمالا حدس زدید کاری که انجام میدیم اینه که
 توی Array list اول از همه بیشتر از فضایی که نیازه رو در نظر میگیریم و خالی قرار میدیمش.
 بعد کاری که میکنیم اینه وقتی چیزی add میشه ما میایم تو آخر آرایه اون رو اضافه میکنیم.
 
@@ -420,13 +420,16 @@ append رو سه بار دیگم با o(1)
 </div>
 
 ```Python
-from typing import Any, Optional
+from typing import Any
 
 
 class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
+
+    def __str__(self):
+        return f'data: {self.data}'
 
 
 class SinglyLinkedList:
@@ -436,11 +439,15 @@ class SinglyLinkedList:
         self.__tail = None
         self.__size = 0
 
-    def __set_new_head(self, node: Node) -> None:
-        self.__head = node
+    def size(self) -> int:
+        return self.__size
 
-    def __set_new_tail(self, node: Node) -> None:
-        self.__tail = node
+    def __update_size(self) -> None:
+        self.__size += 1
+
+    def insure_index(self, index: int) -> None:
+        if index > self.size() - 1:
+            raise IndexError
 
     def head(self) -> Node:
         return self.__head
@@ -448,31 +455,41 @@ class SinglyLinkedList:
     def tail(self) -> Node:
         return self.__tail
 
-    def __update_size(self) -> None:
-        self.__size += 1
+    def __set_head(self, node: Node) -> None:
+        self.__head = node
 
-    def size(self) -> int:
-        return self.__size
-
-    def insure_index(self, index: int) -> None:
-        try:
-            if index > self.size():
-                raise IndexError
-        except ValueError:
-            raise IndexError
+    def __set_tail(self, node: Node) -> None:
+        self.__tail = node
 
     def append(self, data: Any) -> None:
         new_node = Node(data=data)
+
         if self.head() is None:
-            self.__set_new_head(node=new_node)
+            self.__set_head(node=new_node)
 
         if self.tail() is None:
-            self.__set_new_tail(node=new_node)
+            self.__set_tail(node=new_node)
         else:
             self.tail().next = new_node
-            self.__set_new_tail(node=new_node)
+            self.__set_tail(node=new_node)
 
         self.__update_size()
+
+    def get_node(self, index: int) -> Node:
+        self.insure_index(index=index)
+
+        count = 0
+        current = self.head()
+
+        while index != count:
+            current = current.next
+            count += 1
+
+        return current
+
+    def get(self, index: int) -> Any:
+        node = self.get_node(index=index)
+        return node.data
 
     def set(self, index: int, data: Any) -> None:
         self.insure_index(index=index)
@@ -498,13 +515,13 @@ class SinglyLinkedList:
             current = current.next
             count += 1
 
-        previous.next = current.next
+        if previous:
+            previous.next = current.next
+        else:
+            self.__set_head(current.next)
         del current
 
-    def pop(self, index: Optional[int] = None) -> Any:
-        if index is None:
-            index = self.size() - 1
-
+    def pop(self, index: int = 0) -> Any:
         self.insure_index(index=index)
 
         count = 0
@@ -517,24 +534,24 @@ class SinglyLinkedList:
             count += 1
 
         if previous:
-            if current.next:
-                previous.next = current.next
-            else:
-                self.__set_new_tail(node=previous)
-                previous.next = None
+            previous.next = current.next
         else:
-            self.__set_new_head(node=current)
+            self.__set_head(node=current.next)
 
         data = current.data
         del current
-
         return data
 
-    def print_list(self) -> None:
+    def __str__(self) -> str:
+        my_list = []
+
         current = self.head()
+
         while current:
-            print(current.data)
+            my_list.append(current.data)
             current = current.next
+
+        return str(my_list)
 ```
 
 <div dir="rtl">
@@ -831,4 +848,104 @@ print(unsorted_list)
 هرچقدر به ریشه نردیک تر باشد عمق نیز کمتر میشود.
 
 همچنین ما انواع مختلفی از درخت هارو داریم مثل Binary tree و B-tree که در ادامه بصورت جزئی بررسی میکنیم.
+
+<h3>پیاده سازی ساختار داده درخت در پایتون</h3>
+با توجه به توضیحاتی که دادیم. یک ساختار درختی ریشته و فرزندانی را دارد. در یک مثال ساده پایتونی به این شکل می توانیم پیاده سازی کنیم:
+</div>
+
+```Python
+from typing import Any
+
+
+class TreeNode:
+
+    def __init__(self, value: Any, parent: Any | None = None) -> None:
+        self.parent = parent
+        self.value = value
+        self.__children = []
+
+    def add_child(self, value) -> None:
+        new_child = TreeNode(value=value, parent=self)
+        self.__children.append(new_child)
+
+    def children(self) -> list:
+        return self.__children
+
+    def get_all_children(self) -> list:
+        all_children = []
+        depth_count = 0
+        for child in self.__children:
+            depth_count += 1
+            all_children.append(child)
+            all_children.extend(child.get_all_children())
+        return all_children
+
+    def depth(self) -> int:
+        count = 0
+        node = self
+        while node and node.parent:
+            node = node.parent
+            count += 1
+        return count
+
+    def get_depth(self) -> int:
+        if not self.__children:
+            return 0
+        else:
+            child_depths = [child.get_depth() for child in self.__children]
+            return max(child_depths) + 1
+
+    def get_height(self) -> int:
+        if not self.__children:
+            return 0
+        else:
+            child_heights = [child.get_height() for child in self.__children]
+            return max(child_heights) + 1
+
+    def remove(self) -> None:
+        parent = self.parent
+        children = self.children()
+        if parent:
+            parent.__children.extend(children)
+            parent.__children.remove(self)
+        del self
+
+
+class Tree:
+
+    def __init__(self, value: Any) -> None: self.__root = self.__create_root(value=value)
+
+    @staticmethod
+    def __create_root(value: Any) -> TreeNode: return TreeNode(value=value)
+
+    @property
+    def root(self):
+        return self.__root
+
+    def __str__(self): return f'root name: {self.__root.value}'
+```
+
+<div dir="rtl">
+طبق نیازمندی ها. باید بتوانیم در یک ساختار داده ی درختی به فرزندان دسترسی داشته باشیم و همچنین عمق و ارتفاع را هم بتوانیم بدست بیاوریم.
+
+<h3>
+ساختار داده ی درخت دودویی و درخت کامل:
+</h3>
+در یک درخت دودویی هر گره فقط می تواند دو یک یا دو فرزند داشته باشد. ساختار درخت کامل نیز به درختی گفته میشود که تمامی فرزندانش
+بجز برگ ها دو فرزند دارند.
+
+در پیاده سازی ساختار داده ی درختی خیلی از الگوریتم بازگشتی استفاده میشود.
+</div>
+
+![data-structures.png](https://media.geeksforgeeks.org/wp-content/uploads/20220630154756/img2.jpg)
+
+<div dir="rtl">
+همچنین می توان یک درخت دودویی را در یک آرایه پیاده سازی کرد.
+</div>
+
+![data-structures.png](https://i.stack.imgur.com/7MkVp.png)
+
+<div dir="rtl">
+<h3>درخت جستچوی دودویی</h3>
+
 </div>
